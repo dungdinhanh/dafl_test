@@ -100,11 +100,11 @@ def load_model(path):
     return generator
 
 
-def save_images_diff(images, path):
+def save_images_diff(images, path, count):
     # method to store generated images locally
     os.makedirs(path, exist_ok=True)
     for id in range(images.shape[0]):
-        image_name = str(id) + ".png"
+        image_name = str(count + id) + ".png"
         image_name = os.path.join(path, image_name)
         image_np = images[id].data.cpu().numpy().transpose((1, 2, 0))
         pil_image = Image.fromarray((image_np * 255).astype(np.uint8))
@@ -117,7 +117,7 @@ def generate_images(generator: torch.nn.Module, num,path):
     while count < num:
         z = Variable(torch.randn(opt.batch_size, opt.latent_dim)).cuda()
         gen_imgs = generator(z)
-        save_images_diff(gen_imgs, path)
+        save_images_diff(gen_imgs, path, count)
         count += opt.batch_size
 
 
