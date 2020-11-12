@@ -93,6 +93,7 @@ class Generator(nn.Module):
 def load_model(path):
     dict_save = torch.load(path)
     generator = Generator()
+    generator = nn.DataParallel(generator)
     generator.load_state_dict(dict_save['state_dict'])
     best_accr = dict_save['accuracy']
     print("Achieve best accuracy: %f"%float(best_accr))
