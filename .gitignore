@@ -2,3 +2,6 @@ cache/
 figure/
 gen_images/
 .idea/
+__pycache__/
+*/__pycache__/
+
