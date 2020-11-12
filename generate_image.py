@@ -111,17 +111,20 @@ def save_images_diff(images, path):
         pil_image.save(image_name)
 
 
-def generate_images(generator: torch.nn.Module, path):
+def generate_images(generator: torch.nn.Module, num,path):
     generator.eval()
-    z = Variable(torch.randn(opt.batch_size, opt.latent_dim)).cuda()
-    gen_imgs = generator(z)
-    save_images_diff(gen_imgs, path)
+    count = 0
+    while count < num:
+        z = Variable(torch.randn(opt.batch_size, opt.latent_dim)).cuda()
+        gen_imgs = generator(z)
+        save_images_diff(gen_imgs, path)
+        count += opt.batch_size
 
 
 
 if __name__ == '__main__':
     generator = load_model(os.path.join(opt.output_dir, "generator.pth"))
-    generate_images(generator, "gen_images")
+    generate_images(generator, 50000,"gen_images")
     pass
 
 
