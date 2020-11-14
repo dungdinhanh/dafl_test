@@ -26,6 +26,7 @@ from torchvision.datasets import CIFAR10
 from torchvision.datasets import CIFAR100
 import resnet
 import time
+import torchvision.utils as vutils
 from PIL import Image
 
 parser = argparse.ArgumentParser()
@@ -111,6 +112,8 @@ def save_images_diff(images, path, count):
         pil_image.save(image_name)
 
 
+
+
 def generate_images(generator: torch.nn.Module, num,path):
     generator.eval()
     count = 0
@@ -120,11 +123,19 @@ def generate_images(generator: torch.nn.Module, num,path):
         save_images_diff(gen_imgs, path, count)
         count += opt.batch_size
 
+def generate_batch(generator: torch.nn.Module, num_batch):
+    generator.eval()
+    z = Variable(torch.randn(num_batch, opt.latent_dim)).cuda()
+    gen_imgs = generator(z)
+    vutils.save_image(gen_imgs, "batch_dafl.png", normalize=True, scale_each=True, nrow=int(8))
+
+
 
 
 if __name__ == '__main__':
     generator = load_model(os.path.join(opt.output_dir, "generator.pth"))
     generate_images(generator, 50000,"gen_images")
+    generate_batch(generator, 64)
     pass
 
 
